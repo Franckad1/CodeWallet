@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import dbProvider from '../Providers/dbProvider'
 import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast, ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -17,9 +19,8 @@ const FragmentsForm = () => {
   const [tags, setTags] = useState(['']) // ← tableau des tags
   const navigate = useNavigate()
   const { id } = useParams()
-
   const affiche = Number(id) === 0 ? 'Ajouter' : 'Modifier'
-
+  let freezeButton=''
   useEffect(() => {
     const getAllData = async () => {
       const list = await dbProvider.getAllData('fragments')
@@ -58,14 +59,33 @@ const FragmentsForm = () => {
 
   const addData = async (event) => {
     event.preventDefault()
-    await dbProvider.addData({ fragment: name, code: content }, 'fragments')
-    navigate('/')
+    if (name === '') {
+      toast.error('Fill the title')
+      return
+    } else if (content === '') {
+      toast.error('Fill the Content')
+      return
+    } else {
+      await dbProvider.addData({ fragment: name, code: content }, 'fragments')
+      freezeButton='none';
+      navigate('/')
+    }
   }
 
   const modifyData = async (event) => {
     event.preventDefault()
-    await dbProvider.setData({ fragment: name, code: content, tags }, 'fragments', id)
-    navigate('/')
+    if (name === '') {
+      toast.error('Fill the title')
+      return
+    } else if (content === '') {
+      toast.error('Fill the Content')
+      return
+    }else{
+      await dbProvider.setData({ fragment: name, code: content, tags }, 'fragments', id)
+      navigate('/')
+    }
+    
+    
   }
 
   return (
@@ -126,10 +146,11 @@ const FragmentsForm = () => {
           </button>
         </div>
 
-        <button className="submit-button" style={{ fontSize: '15px' }}>
+        <button className="submit-button" style={{ fontSize: '15px',pointerEvents: freezeButton }}>
           {affiche}
         </button>
       </form>
+      <ToastContainer />
     </StyledDiv>
   )
 }

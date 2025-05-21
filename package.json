@@ -23,6 +23,7 @@
     "electron-updater": "^6.3.9",
     "firebase": "^11.8.0",
     "react-router-dom": "^7.6.0",
+    "react-toastify": "^11.0.5",
     "styled-components": "^6.1.18"
   },
   "devDependencies": {

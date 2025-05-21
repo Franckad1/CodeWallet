@@ -23,9 +23,12 @@ const Fragment = ({ fragment }) => {
   }
   const deleteData = async (event) => {
     event.preventDefault()
-    await dbProvider.deleteData('fragments', fragment.id)
-    navigate('/')
+    if (window.confirm('Do you want to delete this fragment')) {
+      await dbProvider.deleteData('fragments', fragment.id)
+      window.location.reload()
+    }
   }
+
   return (
     <>
       <div className="fragment-container">

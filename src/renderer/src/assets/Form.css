@@ -70,7 +70,7 @@
 /* Bouton de soumission */
 .submit-button {
   position: absolute;
-  bottom: 20px; /* 20px depuis le bas */
+  bottom: 0px; /* 20px depuis le bas */
   right: 20px; /* 20px depuis la droite */
   margin-top: 10px;
   padding: 10px;
