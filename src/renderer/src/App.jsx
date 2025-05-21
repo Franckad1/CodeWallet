@@ -1,32 +1,54 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
+// import React from 'react'
+import Dashboard from './Components/Dashboard'
+// import Tags from "./Components/Tags";
+import { Route, Routes } from 'react-router-dom'
+import styled from 'styled-components'
+import { Link } from 'react-router-dom'
+import FragmentsForm from './Components/FragmentForm'
+const StyledHead = styled.header`
+  display: flex;
+  color: black;
+  padding: 10px;
+  justify-content: space-between;
+  align-items: center;
+`
 
+const a = {
+  color: 'white',
+  textDecoration: 'none',
+  fontSize: '18px'
+}
 function App() {
-  const ipcHandle = () => window.electron.ipcRenderer.send('ping')
-
   return (
     <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
-        </div>
-      </div>
-      <Versions></Versions>
+      <StyledHead>
+        <strong>
+          <Link to={'/'} style={{ fontSize: '45px', textDecoration: 'none', color: 'white' }}>
+            Code Wallet &nbsp;
+          </Link>
+        </strong>
+        <strong>
+          <Link to={'/'} style={a}>
+            Fragments &nbsp;
+          </Link>
+        </strong>
+        <strong>
+          <Link to={'#'} style={a}>
+            Tags &nbsp;
+          </Link>
+        </strong>
+        <strong>
+          <Link to={'#'} style={a}>
+            Info &nbsp;
+          </Link>
+        </strong>
+      </StyledHead>
+
+      <Routes>
+        <Route index element={<Dashboard />} />
+        <Route path="/Fragment/:id" element={<FragmentsForm />} />
+        {/* <Route path="/Tags" element={<Tags />} /> */}
+      </Routes>
     </>
   )
 }
