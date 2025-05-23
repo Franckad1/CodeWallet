@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import FragmentsForm from './Components/FragmentForm'
 import Tags from './Components/Tags'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const ContainerDiv = styled.div`
   box-sizing: border-box;
@@ -73,7 +73,18 @@ function App() {
   const [theme, setTheme] = useState(true)
   const changingMode = () => {
     setTheme(!theme)
+    const newTheme = theme === false ? 'light' : 'dark'
+    localStorage.setItem('theme', newTheme)
   }
+  useEffect(() => {
+    function initTheme() {
+      const storedPreference = localStorage.getItem('theme')
+      setTheme(storedPreference === 'light' ? true : false)
+    }
+    initTheme()
+  }, [])
+  console.log(localStorage.getItem('theme'))
+
   return (
     <div id="container" className={theme ? '' : 'dark'}>
       <StyledHead>
@@ -101,7 +112,6 @@ function App() {
           <StyledDiv className={theme && 'on'} onClick={changingMode} />
         </ContainerDiv>
       </StyledHead>
-
       <Routes>
         <Route index element={<Dashboard classType={theme ? '' : 'dark'} />} />
         <Route path="/Fragment/:id" element={<FragmentsForm classType={theme ? '' : 'dark'} />} />

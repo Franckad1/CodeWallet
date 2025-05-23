@@ -1,6 +1,6 @@
 import dbProvider from '../Providers/dbProvider'
 import { useState, useEffect } from 'react'
-import TagFragment from './TagFragment'
+import Filler from './Filler'
 const Tags = ({classType}) => {
   const [tags, setTags] = useState([])
 
@@ -15,13 +15,9 @@ const Tags = ({classType}) => {
 
   return (
     <>
+      
     <h2 style={{color:'white'}}>Tags:</h2>
-      {tags.map((tag) => (
-        <TagFragment tags={tag.data} key={tag.id} />
-      ))}
-       <button className="add-tags" id={classType}>
-          +
-       </button>
+     <Filler tagsContainer = {tags} classType={classType} />
     </>
   )
 }
