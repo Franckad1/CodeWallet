@@ -22,7 +22,9 @@
     "@electron-toolkit/utils": "^4.0.0",
     "electron-updater": "^6.3.9",
     "firebase": "^11.8.0",
+    "prop-types": "^15.8.1",
     "react-router-dom": "^7.6.0",
+    "react-tag-input": "^6.10.6",
     "react-toastify": "^11.0.5",
     "styled-components": "^6.1.18"
   },

@@ -13,27 +13,24 @@ const StyledDiv = styled.div`
   margin: 0;
 `
 
-const FragmentsForm = () => {
+const FragmentsForm = ({classType}) => {
   const [name, setName] = useState('')
   const [content, setContent] = useState('')
   const [tags, setTags] = useState(['']) // ← tableau des tags
   const navigate = useNavigate()
   const { id } = useParams()
-  const affiche = Number(id) === 0 ? 'Ajouter' : 'Modifier'
-  let freezeButton=''
+
   useEffect(() => {
     const getAllData = async () => {
       const list = await dbProvider.getAllData('fragments')
       const fragment = list.reduce(
         (result, value) => {
-          if (id === value.id) {
-            result = value
-          }
+          if (id === value.id) result = value
           return result
         },
-        { id: 0, data: { fragment: '', code: '', tags: [''] } }
+        { id: 0, data: { title: '', code: '', tags: [''] } }
       )
-      setName(fragment.data.fragment)
+      setName(fragment.data.title)
       setContent(fragment.data.code)
       setTags(fragment.data.tags || [''])
     }
@@ -66,8 +63,10 @@ const FragmentsForm = () => {
       toast.error('Fill the Content')
       return
     } else {
-      await dbProvider.addData({ fragment: name, code: content }, 'fragments')
-      freezeButton='none';
+      await dbProvider.addData({ title: name, code: content, tags:tags }, 'fragments')
+      tags.forEach(async(tag)=>{
+        await dbProvider.addData({name:tag},'tags')
+      }) 
       navigate('/')
     }
   }
@@ -81,7 +80,7 @@ const FragmentsForm = () => {
       toast.error('Fill the Content')
       return
     }else{
-      await dbProvider.setData({ fragment: name, code: content, tags }, 'fragments', id)
+      await dbProvider.setData({ title: name, code: content, tags }, 'fragments', id)
       navigate('/')
     }
     
@@ -101,6 +100,7 @@ const FragmentsForm = () => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="input-field"
+          id={classType}
         />
 
         <label htmlFor="code" style={{ fontSize: '20px' }}>
@@ -108,6 +108,7 @@ const FragmentsForm = () => {
         </label>
         <textarea
           className="textarea-field"
+          id={classType}
           placeholder="Content"
           value={content}
           onChange={(e) => setContent(e.target.value)}
@@ -127,7 +128,8 @@ const FragmentsForm = () => {
               <input
                 type="text"
                 className="tag-input"
-                value={tag}
+                id={classType}
+                value={tag.toUpperCase()}
                 onChange={(e) => handleTagChange(index, e.target.value)}
               />
               <button
@@ -146,8 +148,8 @@ const FragmentsForm = () => {
           </button>
         </div>
 
-        <button className="submit-button" style={{ fontSize: '15px',pointerEvents: freezeButton }}>
-          {affiche}
+        <button className="submit-button" id={classType} style={{ fontSize: '15px'}}>
+          {Number(id) === 0 ? 'Ajouter' : 'Modifier'}
         </button>
       </form>
       <ToastContainer />

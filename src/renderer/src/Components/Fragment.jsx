@@ -1,7 +1,10 @@
 import { useState } from 'react'
 import dbProvider from '../Providers/dbProvider'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import Cover from '../assets/Cover.png'
+import Opened from '../assets/Opened.png'
 const StyledDiv = styled.div`
   background-color: white;
   color: white;
@@ -15,46 +18,49 @@ const a = {
   textDecoration: 'none'
 }
 
-const Fragment = ({ fragment }) => {
-  const navigate = useNavigate()
+const Fragment = ({ fragment,classType }) => {  
   const [openCode, setOpenCode] = useState(false)
   const toggle = () => {
     openCode === false ? setOpenCode(true) : setOpenCode(false)
   }
-  const deleteData = async (event) => {
+  
+  const deleteFragment = async (event) => {
     event.preventDefault()
     if (window.confirm('Do you want to delete this fragment')) {
       await dbProvider.deleteData('fragments', fragment.id)
       window.location.reload()
     }
   }
-
   return (
     <>
       <div className="fragment-container">
         <br />
         <div className="styled-div-wrapper">
           <Link to={`/Fragment/${fragment.id}`} style={a}>
-            <StyledDiv>
-              <h1 style={{ fontSize: '30px', color: '#333333' }}>{fragment.data.fragment}</h1>
+            <StyledDiv id={classType}>
+              <h1 style={{ fontSize: '30px', color: '#333333' }}>{fragment.data.title}</h1>
             </StyledDiv>
           </Link>
-          {openCode && <div className="code-appear">{fragment.data.code}</div>}
+          {openCode && <div className={classType===''?"code-appear":"code-appear-dark"}>{fragment.data.code}</div>}
         </div>
 
-        <button className="code-button" onClick={toggle}>
+        <button className={classType===''?"code-button":"code-button-dark"} onClick={toggle}>
           <img
             className="code-image"
-            src={`./assets/${openCode ? 'Opened' : 'Cover'}.png`}
+            src={openCode ? Opened : Cover}
             alt=""
           />
         </button>
 
-        <button className="remove-fragment" onClick={deleteData}>
+        <button className="remove-fragment" onClick={deleteFragment}>
           x
         </button>
       </div>
     </>
   )
+}
+Fragment.propTypes = {
+  fragment: PropTypes.object,
+  classType: PropTypes.string
 }
 export default Fragment
