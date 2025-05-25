@@ -3,6 +3,9 @@ import dbProvider from '../Providers/dbProvider'
 import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
+import { dracula } from '@uiw/codemirror-theme-dracula'
+import { javascript } from '@codemirror/lang-javascript';
+import CodeMirror from '@uiw/react-codemirror';
 import 'react-toastify/dist/ReactToastify.css'
 
 const StyledDiv = styled.div`
@@ -124,7 +127,12 @@ const syncTagsWithGeneralCollection = async (tagList) => {
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
-
+        <CodeMirror
+         value={content} height="200px" 
+        extensions={[javascript({ jsx: true })]} 
+        theme={dracula}
+        onChange={(e) => setContent(e)}
+         />
         <div className="tags-container">
           <label>Tags:</label>
           {tags.map((tag, index) => (

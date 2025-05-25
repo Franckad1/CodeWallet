@@ -2,7 +2,7 @@ import dbProvider from '../Providers/dbProvider'
 import { useState, useEffect } from 'react'
 import Filler from './TagsFragment'
 
-const Tags = ({classType}) => {
+const Tags = ({ classType }) => {
   const [tags, setTags] = useState([])
 
   useEffect(() => {
@@ -17,9 +17,8 @@ const Tags = ({classType}) => {
 
   return (
     <>
-
-    <h2 style={{color:'white'}}>Tags:</h2>
-     <Filler tagsContainer = {tags} classType={classType} />
+      <h2 style={{ color: 'white' }}>Tags:</h2>
+      <Filler tagsContainer={tags} classType={classType} />
     </>
   )
 }
