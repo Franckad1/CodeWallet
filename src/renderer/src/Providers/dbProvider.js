@@ -1,4 +1,14 @@
-import { collection, addDoc, doc, updateDoc, getDocs, deleteDoc, setDoc } from 'firebase/firestore'
+import {
+  collection,
+  addDoc,
+  doc,
+  updateDoc,
+  getDocs,
+  deleteDoc,
+  setDoc,
+  query,
+  where
+} from 'firebase/firestore'
 import { db } from '../Config/FirebaseConifg'
 
 export default {
@@ -31,6 +41,12 @@ export default {
   },
   async deleteData(path, id) {
     await deleteDoc(doc(db, path, id))
+  },
+  async fetchByAnyTags(tagList) {
+    const q = query(collection(db, 'fragments'), where('tags', 'array-contains-any', tagList))
+
+    const snapshot = await getDocs(q)
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   },
   async updateData(data, path, id) {
     const fragmentRef = doc(db, path, id)

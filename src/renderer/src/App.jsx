@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 
 import Tags from './Components/Tags'
 import useKeyPress from './Components/KeyPress'
+import Info from './Components/info'
 
 const ContainerDiv = styled.div`
   box-sizing: border-box;
@@ -88,7 +89,7 @@ function App() {
     if (event.ctrlKey === true) {
       if (event.key === 'f') navigate('/')
       else if (event.key === 't') navigate('/Tags')
-      else if (event.key === 'i') navigate('#')
+      else if (event.key === 'i') navigate('/info')
       else if (event.key === 'n') navigate(`/Fragment/${0}`)
       else if (event.key === 'd') setTheme(!theme)
     }
@@ -115,26 +116,10 @@ function App() {
           </Link>
         </strong>
         <strong>
-          <Link to={'#'} style={a}>
+          <Link to={'/info'} style={a}>
             Info &nbsp;
           </Link>
         </strong>
-        <form>
-          <div>
-            <label htmlFor="mySearch">Rechercher un fragment par son tag:</label>
-            <input
-              type="search"
-              id="mySearch"
-              name="q"
-              placeholder="Rechercher un fragment"
-              required
-              size={10}
-              pattern="[A-z]"
-            />
-            <button>Rechercher</button>
-            <span className="validity"></span>
-          </div>
-        </form>
         <ContainerDiv>
           <StyledDiv className={theme && 'on'} onClick={changingMode} />
         </ContainerDiv>
@@ -143,6 +128,7 @@ function App() {
         <Route index element={<Dashboard classType={theme ? '' : 'dark'} />} />
         <Route path="/Fragment/:id" element={<FragmentsForm classType={theme ? '' : 'dark'} />} />
         <Route path="/Tags" element={<Tags classType={theme ? '' : 'dark'} />} />
+        <Route path="/info" element={<Info classType={theme ? '' : 'dark'} />} />
       </Routes>
     </div>
   )

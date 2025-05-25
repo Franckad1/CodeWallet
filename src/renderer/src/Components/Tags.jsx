@@ -1,6 +1,7 @@
 import dbProvider from '../Providers/dbProvider'
 import { useState, useEffect } from 'react'
-import Filler from './TagsFragment'
+import TagsView from './TagsFragment'
+import PropTypes from 'prop-types'
 
 const Tags = ({ classType }) => {
   const [tags, setTags] = useState([])
@@ -18,8 +19,11 @@ const Tags = ({ classType }) => {
   return (
     <>
       <h2 style={{ color: 'white' }}>Tags:</h2>
-      <Filler tagsContainer={tags} classType={classType} />
+      <TagsView tagsContainer={tags} classType={classType} />
     </>
   )
+}
+Tags.propTypes = {
+  classType: PropTypes.string
 }
 export default Tags

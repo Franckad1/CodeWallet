@@ -1,13 +1,11 @@
-import { collection, doc, getDocs, setDoc, writeBatch } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import { collection, getDocs, writeBatch } from 'firebase/firestore'
+import { useEffect, useState } from 'react'
 import { WithContext as ReactTags, SEPARATORS } from 'react-tag-input'
-// import { WithContext as ReactTags, SEPARATORS } from '../src/index';
 import { db } from '../Config/FirebaseConifg'
 import dbProvider from '../Providers/dbProvider'
+import PropTypes from 'prop-types'
 
-
-
-const Filler = ({ tagsContainer, classType }) => {
+const TagsView = ({ tagsContainer, classType }) => {
   const [tags, setTags] = useState([])
   const [loading, setLoading] = useState(false)
   let currentId = null
@@ -72,11 +70,6 @@ const Filler = ({ tagsContainer, classType }) => {
     console.log('Current ID:', currentId)
   }
 
-  const onClearAll = async () => {
-    await wipeTags()
-    setTags([])
-  }
-
   const wipeTags = async (collPath) => {
     const colRef = collection(db, 'tags')
     const snap = await getDocs(colRef)
@@ -106,8 +99,8 @@ const Filler = ({ tagsContainer, classType }) => {
       <div>
         <ReactTags
           tags={tags.map((tag) => ({
-            id: tag.data?.name?.id || tag.id,
-            text: tag.data?.name?.text || tag.text,
+            id: tag.data?.name?.id.toUpperCase() || tag.id.toUpperCase(),
+            text: tag.data?.name?.text.toUpperCase() || tag.text.toUpperCase(),
             className: tag.data?.name?.className || tag.className
           }))}
           suggestions={suggestions}
@@ -119,9 +112,9 @@ const Filler = ({ tagsContainer, classType }) => {
           onTagUpdate={onTagUpdate}
           inputFieldPosition="bottom"
           editable
-          // clearAll
-          // onClearAll={onClearAll}
           maxTags={100}
+          className="tag-input"
+          id={classType}
         />
       </div>
 
@@ -129,19 +122,18 @@ const Filler = ({ tagsContainer, classType }) => {
         style={{
           color: 'lightcoral',
           marginTop: '50px',
-          border: '1px solid pink',
+          border: 'none',
           padding: '10px'
         }}
       >
-        <h3>SUPPRESSION DES TAGS de la DB</h3>
-        <p>Supprimer tous les tags de la collection</p>
         <button
           style={{
-            backgroundColor: 'red',
-            color: 'white',
+            color: '#333333',
             padding: '10px 20px',
-            borderRadius: '5px'
+            borderRadius: '10px',
+            border: 'none'
           }}
+          id={classType}
           onClick={handlePurge}
           disabled={loading}
         >
@@ -151,5 +143,8 @@ const Filler = ({ tagsContainer, classType }) => {
     </div>
   )
 }
-
-export default Filler
+TagsView.propTypes = {
+  tagsContainer: PropTypes.array,
+  classType: PropTypes.string
+}
+export default TagsView

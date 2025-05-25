@@ -11,6 +11,7 @@ import { python } from '@codemirror/lang-python'
 import { javascript } from '@codemirror/lang-javascript'
 import CodeMirror from '@uiw/react-codemirror'
 import 'react-toastify/dist/ReactToastify.css'
+import PropTypes from 'prop-types'
 
 const StyledDiv = styled.div`
   display: flex;
@@ -192,5 +193,7 @@ const FragmentsForm = ({ classType }) => {
     </StyledDiv>
   )
 }
-
+FragmentsForm.propTypes = {
+  classType: PropTypes.string
+}
 export default FragmentsForm
