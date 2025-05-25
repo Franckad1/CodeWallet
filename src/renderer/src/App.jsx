@@ -1,10 +1,10 @@
 import Dashboard from './Components/Dashboard'
-import { Route, Routes } from 'react-router-dom'
+import { useNavigate, Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import FragmentsForm from './Components/FragmentForm'
 import { useEffect, useState } from 'react'
-import TagsFragment from './Components/TagsFragment'
+
 import Tags from './Components/Tags'
 import useKeyPress from './Components/KeyPress'
 
@@ -76,6 +76,7 @@ function App() {
     const newTheme = theme === false ? 'light' : 'dark'
     localStorage.setItem('theme', newTheme)
   }
+  const navigate = useNavigate()
   useEffect(() => {
     function initTheme() {
       const storedPreference = localStorage.getItem('theme')
@@ -84,10 +85,16 @@ function App() {
     initTheme()
   }, [])
   const onKeyPress = (event) => {
-    console.log(`key pressed: ${event.key}`)
+    if (event.ctrlKey === true) {
+      if (event.key === 'f') navigate('/')
+      else if (event.key === 't') navigate('/Tags')
+      else if (event.key === 'i') navigate('#')
+      else if (event.key === 'n') navigate(`/Fragment/${0}`)
+      else if (event.key === 'd') setTheme(!theme)
+    }
   }
 
-  useKeyPress(['a', 'b', 'c'], onKeyPress)
+  useKeyPress(['f', 't', 'i', 'n', 'd'], onKeyPress)
 
   return (
     <div id="container" className={theme ? '' : 'dark'}>

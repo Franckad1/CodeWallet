@@ -23,10 +23,11 @@ const StyledDiv = styled.div`
 const FragmentsForm = ({ classType }) => {
   const [name, setName] = useState('')
   const [content, setContent] = useState('')
-  const [tags, setTags] = useState(['']) // ← tableau des tags
+  const [tags, setTags] = useState([''])
+  const [existingTags, setExistingTags] = useState([''])
   const navigate = useNavigate()
   const { id } = useParams()
-
+  const [loading, setLoading] = useState(false)
   useEffect(() => {
     const getAllData = async () => {
       const list = await dbProvider.getAllData('fragments')
@@ -40,6 +41,9 @@ const FragmentsForm = ({ classType }) => {
       setName(fragment.data.title)
       setContent(fragment.data.code)
       setTags(fragment.data.tags || [''])
+      const existingTags = await dbProvider.getAllData('tags')
+      const existingTagNames = existingTags.map((tag) => tag.data.name.text.toUpperCase())
+      setExistingTags(existingTagNames)
     }
 
     getAllData()
@@ -81,8 +85,10 @@ const FragmentsForm = ({ classType }) => {
       toast.error('Fill the Content')
       return
     } else {
+      setLoading(true)
       await syncTagsWithGeneralCollection(tags)
-      await dbProvider.updateData({ title: name, code: content, tags: tags }, 'fragments', id)
+      await dbProvider.addData({ title: name, code: content, tags: tags }, 'fragments')
+      setLoading(false)
       navigate('/')
     }
   }
@@ -96,8 +102,10 @@ const FragmentsForm = ({ classType }) => {
       toast.error('Fill the Content')
       return
     } else {
+      setLoading(true)
       await syncTagsWithGeneralCollection(tags)
       await dbProvider.setData({ title: name, code: content, tags: tags }, 'fragments', id)
+      setLoading(false)
       navigate('/')
     }
   }
@@ -143,6 +151,7 @@ const FragmentsForm = ({ classType }) => {
                 type="text"
                 className="tag-input"
                 id={classType}
+                list="Tags"
                 value={tag.toUpperCase()}
                 onChange={(e) => handleTagChange(index, e.target.value)}
               />
@@ -157,12 +166,25 @@ const FragmentsForm = ({ classType }) => {
               </button>
             </div>
           ))}
+
+          <datalist id="Tags">
+            {existingTags.map((tag) => (
+              <option value={tag} key={tag} />
+            ))}
+          </datalist>
+
           <button className="add-tag" onClick={addTagField}>
             +
           </button>
         </div>
 
-        <button type="submit" className="submit-button" id={classType} style={{ fontSize: '15px' }}>
+        <button
+          type="submit"
+          className="submit-button"
+          id={classType}
+          style={{ fontSize: '15px' }}
+          disabled={loading}
+        >
           {Number(id) === 0 ? 'Ajouter' : 'Modifier'}
         </button>
       </form>
