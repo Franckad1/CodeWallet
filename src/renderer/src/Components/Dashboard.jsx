@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import dbProvider from '../Providers/dbProvider'
 import { Link } from 'react-router-dom'
@@ -24,7 +24,7 @@ const a = {
   textDecoration: 'none'
 }
 
-const Dashbord = ({classType}) => {
+const Dashbord = ({ classType }) => {
   const [fragments, setFragments] = useState([])
   useEffect(() => {
     const getAllData = async () => {
@@ -47,7 +47,7 @@ const Dashbord = ({classType}) => {
     </>
   )
 }
-Dashbord.propTypes={
-  classType:PropTypes.string
+Dashbord.propTypes = {
+  classType: PropTypes.string
 }
 export default Dashbord

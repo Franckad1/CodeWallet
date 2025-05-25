@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import dbProvider from '../Providers/dbProvider'
 import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -45,9 +45,20 @@ const FragmentsForm = ({classType}) => {
 
   const handleTagChange = (index, value) => {
     const newTags = [...tags]
-    newTags[index] = value
+    newTags[index] = value.toUpperCase()
     setTags(newTags)
   }
+const syncTagsWithGeneralCollection = async (tagList) => {
+  const existingTags = await dbProvider.getAllData('tags')
+  const existingTagNames = existingTags.map(tag => tag.data.name.text.toUpperCase())
+
+  for (const tag of tagList) {
+    const upperTag = tag.toUpperCase()
+    if (!existingTagNames.includes(upperTag)) {
+      await dbProvider.addData({ name: {className:'',id:upperTag,text: upperTag} }, 'tags')
+    }
+  }
+}
 
   const removeTagField = (index) => {
     const newTags = tags.filter((_, i) => i !== index)
@@ -63,13 +74,12 @@ const FragmentsForm = ({classType}) => {
       toast.error('Fill the Content')
       return
     } else {
-      await dbProvider.addData({ title: name, code: content, tags:tags }, 'fragments')
-      tags.forEach(async(tag)=>{
-        await dbProvider.addData({name:tag},'tags')
-      }) 
+      await syncTagsWithGeneralCollection(tags)
+      await dbProvider.updateData({ title: name, code: content, tags:tags }, 'fragments', id)
       navigate('/')
     }
   }
+  
 
   const modifyData = async (event) => {
     event.preventDefault()
@@ -80,7 +90,8 @@ const FragmentsForm = ({classType}) => {
       toast.error('Fill the Content')
       return
     }else{
-      await dbProvider.setData({ title: name, code: content, tags }, 'fragments', id)
+      await syncTagsWithGeneralCollection(tags)
+      await dbProvider.setData({ title: name, code: content, tags:tags }, 'fragments', id)
       navigate('/')
     }
     

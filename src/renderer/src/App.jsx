@@ -1,12 +1,11 @@
-// import React from 'react'
 import Dashboard from './Components/Dashboard'
-// import Tags from "./Components/Tags";
 import { Route, Routes } from 'react-router-dom'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 import FragmentsForm from './Components/FragmentForm'
-import Tags from './Components/Tags'
 import { useEffect, useState } from 'react'
+import TagsFragment from './Components/TagsFragment'
+import Tags from './Components/Tags'
 
 const ContainerDiv = styled.div`
   box-sizing: border-box;

@@ -18,12 +18,12 @@ const a = {
   textDecoration: 'none'
 }
 
-const Fragment = ({ fragment,classType }) => {  
+const Fragment = ({ fragment, classType }) => {
   const [openCode, setOpenCode] = useState(false)
   const toggle = () => {
     openCode === false ? setOpenCode(true) : setOpenCode(false)
   }
-  
+
   const deleteFragment = async (event) => {
     event.preventDefault()
     if (window.confirm('Do you want to delete this fragment')) {
@@ -41,15 +41,15 @@ const Fragment = ({ fragment,classType }) => {
               <h1 style={{ fontSize: '30px', color: '#333333' }}>{fragment.data.title}</h1>
             </StyledDiv>
           </Link>
-          {openCode && <div className={classType===''?"code-appear":"code-appear-dark"}>{fragment.data.code}</div>}
+          {openCode && (
+            <div className={classType === '' ? 'code-appear' : 'code-appear-dark'}>
+              {fragment.data.code}
+            </div>
+          )}
         </div>
 
-        <button className={classType===''?"code-button":"code-button-dark"} onClick={toggle}>
-          <img
-            className="code-image"
-            src={openCode ? Opened : Cover}
-            alt=""
-          />
+        <button className={classType === '' ? 'code-button' : 'code-button-dark'} onClick={toggle}>
+          <img className="code-image" src={openCode ? Opened : Cover} alt="" />
         </button>
 
         <button className="remove-fragment" onClick={deleteFragment}>
