@@ -119,6 +119,22 @@ function App() {
             Info &nbsp;
           </Link>
         </strong>
+        <form>
+          <div>
+            <label htmlFor="mySearch">Rechercher un fragment par son tag:</label>
+            <input
+              type="search"
+              id="mySearch"
+              name="q"
+              placeholder="Rechercher un fragment"
+              required
+              size={10}
+              pattern="[A-z]"
+            />
+            <button>Rechercher</button>
+            <span className="validity"></span>
+          </div>
+        </form>
         <ContainerDiv>
           <StyledDiv className={theme && 'on'} onClick={changingMode} />
         </ContainerDiv>

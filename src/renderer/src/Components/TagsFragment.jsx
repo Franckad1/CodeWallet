@@ -4,25 +4,14 @@ import { WithContext as ReactTags, SEPARATORS } from 'react-tag-input'
 // import { WithContext as ReactTags, SEPARATORS } from '../src/index';
 import { db } from '../Config/FirebaseConifg'
 import dbProvider from '../Providers/dbProvider'
-const COUNTRIES = []
-const suggestions = COUNTRIES.map((country) => {
-  return {
-    id: country,
-    text: country,
-    className: ''
-  }
-})
 
-const KeyCodes = {
-  comma: 188,
-  enter: [10, 13]
-}
+
 
 const Filler = ({ tagsContainer, classType }) => {
   const [tags, setTags] = useState([])
   const [loading, setLoading] = useState(false)
   let currentId = null
-
+  const suggestions = []
   console.log(tagsContainer)
 
   useEffect(() => {
