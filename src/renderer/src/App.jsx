@@ -6,6 +6,7 @@ import FragmentsForm from './Components/FragmentForm'
 import { useEffect, useState } from 'react'
 import TagsFragment from './Components/TagsFragment'
 import Tags from './Components/Tags'
+import useKeyPress from './Components/KeyPress'
 
 const ContainerDiv = styled.div`
   box-sizing: border-box;
@@ -82,7 +83,11 @@ function App() {
     }
     initTheme()
   }, [])
-  console.log(localStorage.getItem('theme'))
+  const onKeyPress = (event) => {
+    console.log(`key pressed: ${event.key}`)
+  }
+
+  useKeyPress(['a', 'b', 'c'], onKeyPress)
 
   return (
     <div id="container" className={theme ? '' : 'dark'}>

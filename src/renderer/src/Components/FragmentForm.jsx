@@ -4,8 +4,12 @@ import styled from 'styled-components'
 import { useNavigate, useParams } from 'react-router-dom'
 import { toast, ToastContainer } from 'react-toastify'
 import { dracula } from '@uiw/codemirror-theme-dracula'
-import { javascript } from '@codemirror/lang-javascript';
-import CodeMirror from '@uiw/react-codemirror';
+import { html } from '@codemirror/lang-html'
+import { php } from '@codemirror/lang-php'
+import { css } from '@codemirror/lang-css'
+import { python } from '@codemirror/lang-python'
+import { javascript } from '@codemirror/lang-javascript'
+import CodeMirror from '@uiw/react-codemirror'
 import 'react-toastify/dist/ReactToastify.css'
 
 const StyledDiv = styled.div`
@@ -16,7 +20,7 @@ const StyledDiv = styled.div`
   margin: 0;
 `
 
-const FragmentsForm = ({classType}) => {
+const FragmentsForm = ({ classType }) => {
   const [name, setName] = useState('')
   const [content, setContent] = useState('')
   const [tags, setTags] = useState(['']) // ← tableau des tags
@@ -51,17 +55,17 @@ const FragmentsForm = ({classType}) => {
     newTags[index] = value.toUpperCase()
     setTags(newTags)
   }
-const syncTagsWithGeneralCollection = async (tagList) => {
-  const existingTags = await dbProvider.getAllData('tags')
-  const existingTagNames = existingTags.map(tag => tag.data.name.text.toUpperCase())
+  const syncTagsWithGeneralCollection = async (tagList) => {
+    const existingTags = await dbProvider.getAllData('tags')
+    const existingTagNames = existingTags.map((tag) => tag.data.name.text.toUpperCase())
 
-  for (const tag of tagList) {
-    const upperTag = tag.toUpperCase()
-    if (!existingTagNames.includes(upperTag)) {
-      await dbProvider.addData({ name: {className:'',id:upperTag,text: upperTag} }, 'tags')
+    for (const tag of tagList) {
+      const upperTag = tag.toUpperCase()
+      if (!existingTagNames.includes(upperTag)) {
+        await dbProvider.addData({ name: { className: '', id: upperTag, text: upperTag } }, 'tags')
+      }
     }
   }
-}
 
   const removeTagField = (index) => {
     const newTags = tags.filter((_, i) => i !== index)
@@ -78,11 +82,10 @@ const syncTagsWithGeneralCollection = async (tagList) => {
       return
     } else {
       await syncTagsWithGeneralCollection(tags)
-      await dbProvider.updateData({ title: name, code: content, tags:tags }, 'fragments', id)
+      await dbProvider.updateData({ title: name, code: content, tags: tags }, 'fragments', id)
       navigate('/')
     }
   }
-  
 
   const modifyData = async (event) => {
     event.preventDefault()
@@ -92,13 +95,11 @@ const syncTagsWithGeneralCollection = async (tagList) => {
     } else if (content === '') {
       toast.error('Fill the Content')
       return
-    }else{
+    } else {
       await syncTagsWithGeneralCollection(tags)
-      await dbProvider.setData({ title: name, code: content, tags:tags }, 'fragments', id)
+      await dbProvider.setData({ title: name, code: content, tags: tags }, 'fragments', id)
       navigate('/')
     }
-    
-    
   }
 
   return (
@@ -120,19 +121,13 @@ const syncTagsWithGeneralCollection = async (tagList) => {
         <label htmlFor="code" style={{ fontSize: '20px' }}>
           Code :
         </label>
-        <textarea
-          className="textarea-field"
-          id={classType}
-          placeholder="Content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-        />
         <CodeMirror
-         value={content} height="200px" 
-        extensions={[javascript({ jsx: true })]} 
-        theme={dracula}
-        onChange={(e) => setContent(e)}
-         />
+          value={content}
+          height="200px"
+          extensions={[javascript({ jsx: true }), html(), css(), python(), php()]}
+          theme={dracula}
+          onChange={(e) => setContent(e)}
+        />
         <div className="tags-container">
           <label>Tags:</label>
           {tags.map((tag, index) => (
@@ -167,7 +162,7 @@ const syncTagsWithGeneralCollection = async (tagList) => {
           </button>
         </div>
 
-        <button className="submit-button" id={classType} style={{ fontSize: '15px'}}>
+        <button type="submit" className="submit-button" id={classType} style={{ fontSize: '15px' }}>
           {Number(id) === 0 ? 'Ajouter' : 'Modifier'}
         </button>
       </form>
